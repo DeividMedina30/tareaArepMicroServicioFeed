@@ -1,28 +1,41 @@
 package escuelaing.arep;
 
+import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.util.List;
 
-import static spark.Spark.port;
-import static spark.Spark.get;
+import static spark.Spark.*;
 
 public class Feed {
 
-    private static List<String> feed;
+    private static List<Comment> feed=new ArrayList<Comment>();
+
 
     public static void main(String[] args) {
         port(getPort());
         get("/Feed",(req, res) ->{
-            List<String> output=getFeed();
-            return output;
+            Gson gson= new Gson();
+            return gson.toJson(getFeed());
+        });
+        post("/Feed",(req, res) ->{
+            String commentString = req.body();
+            Gson gson= new Gson();
+            Comment comment=gson.fromJson(commentString,Comment.class);
+            if (comment==null){
+                res.status(400);
+                return "Comment couldnt be added";
+            }
+            feed.add(comment);
+            return gson.toJson(getFeed());
         });
     }
 
-    public static List<String> getFeed(){
+    public static List<Comment> getFeed(){
+        Comment temp= new Comment();
+        temp.setBody("aloha");
+        temp.setUser("alguien");
+        feed.add(temp);
         return feed;
-    }
-
-    public static void setFeed(List<String> newFeed){
-        feed=newFeed;
     }
 
     static int getPort() {
