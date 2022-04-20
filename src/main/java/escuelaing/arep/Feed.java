@@ -31,10 +31,6 @@ public class Feed {
     }
 
     public static List<Comment> getFeed(){
-        Comment temp= new Comment();
-        temp.setBody("aloha");
-        temp.setUser("alguien");
-        feed.add(temp);
         return feed;
     }
 
