@@ -18,9 +18,12 @@ public class Feed {
             return gson.toJson(getFeed());
         });
         post("/Feed",(req, res) ->{
-            String commentString = req.body();
+            String UserString = req.queryParams("user");
+            String BodyString = req.queryParams("body");
+            Comment comment=new Comment();
+            comment.setUser(UserString);
+            comment.setBody(BodyString);
             Gson gson= new Gson();
-            Comment comment=gson.fromJson(commentString,Comment.class);
             if (comment==null){
                 res.status(400);
                 return "Comment couldnt be added";
